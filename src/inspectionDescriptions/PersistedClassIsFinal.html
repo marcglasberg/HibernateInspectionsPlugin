@@ -1,0 +1,40 @@
+<html>
+<body>
+This inspection reports when a persisted class is final
+(persisted with Hibernate or similar, annotated with @Entity, @MappedSuperclass, or @Embeddable).
+<p>
+    From the Hibernate documentation:
+
+<blockquote>
+    <i>
+        A central feature of Hibernate, proxies (lazy loading), depends upon the persistent class being either non-final,
+        or the implementation of an interface that declares all public methods.
+        You can persist final classes that do not implement an interface with Hibernate; you will not, however,
+        be able to use proxies for lazy association fetching which will ultimately limit your options for performance tuning.
+    </i>
+</blockquote>
+
+<p>
+    There are 3 ways to solve this:
+    <br>
+    • First is not to declare the class final.
+    <br>• Second is to disable proxy generation:
+<blockquote>
+    <pre>@Entity @Proxy(lazy=false) public class Cat { ... }</pre>
+</blockquote>
+• Third is to tell Hibernate to use the interface instead (possible only when the final class implements a proper "full" interface):
+<blockquote>
+<pre>@Entity @Proxy(proxyClass=ICat.class) public class Cat implements ICat { ... }</pre>
+</blockquote>
+
+<p>
+    <b>Note:</b> This inspection only covers JPA/Hibernate <b>annotated</b> classes. It does <b>not</b> check XML file mappings.
+
+<p>
+    More information:
+    <br>• <a href="https://docs.jboss.org/hibernate/orm/5.0/manual/en-US/html/ch04.html#persistent-classes-pojo-final-example-disable-proxies-ann">Hibernate
+    Docs</a>
+    <br>• <a href="http://stackoverflow.com/questions/6608222/does-a-final-method-prevent-hibernate-from-creating-a-proxy-for-such-an-entity">
+    Stackoverflow question</a>
+</body>
+</html>

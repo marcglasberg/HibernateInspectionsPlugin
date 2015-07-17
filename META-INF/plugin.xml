@@ -1,0 +1,30 @@
+<idea-plugin version="2">
+    <id>marcglasberg.HibernateInspectionsPlugin</id>
+    <name>Hibernate Inspections</name>
+    <version>1.0</version>
+    <vendor email="marcglasberg@gmail.com">Marcelo Glasberg</vendor>
+
+    <description><![CDATA[
+      Hibernate silently fails in certain situations, leading to bugs which are difficult to track down.<br>
+      This plugin helps finding and fixing some of these problems.
+      Under <b>Settings > Inspections > Hibernate inspections</b> it adds the following inspections:
+      <ul>
+        <li>Persisted class is final</li>
+        <li>Final method of a persisted class uses direct field access</li>
+      </ul>
+    ]]></description>
+
+    <change-notes><![CDATA[
+    This plugin code will be open-sourced in GitHub, if you wish to contribute and add more inspections.
+    ]]>
+    </change-notes>
+
+    <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+    <idea-version since-build="139" />
+
+    <extensions defaultExtensionNs="com.intellij">
+        <inspectionToolProvider implementation="marcglasberg.codeInspection.AccessingFieldFromAFinalMethodOfPersistedClass_Provider" />
+        <inspectionToolProvider implementation="marcglasberg.codeInspection.PersistedClassIsFinal_Provider" />
+    </extensions>
+
+</idea-plugin>
