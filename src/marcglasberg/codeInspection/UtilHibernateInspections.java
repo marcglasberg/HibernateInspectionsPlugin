@@ -13,6 +13,8 @@ final class UtilHibernateInspections
                                                                               "javax.persistence.MappedSuperclass",
                                                                               "javax.persistence.Embeddable");
 
+    private static final List<String> EMBEDDABLE_ANNOTATIONS = Collections.singletonList("javax.persistence.Embeddable");
+
     private UtilHibernateInspections()
         {
         }
@@ -26,6 +28,31 @@ final class UtilHibernateInspections
             {
             String qualifiedName = annotation.getQualifiedName();
             if (PERSISTENCE_ANNOTATIONS.contains(qualifiedName)) return true;
+            }
+
+        return false;
+        }
+
+    public static boolean ifClassIsEmbeddable(@NotNull PsiClass clazz)
+        {
+        PsiModifierList classModifierList = clazz.getModifierList();
+        if (classModifierList == null) return false;
+
+        for (PsiAnnotation annotation : classModifierList.getAnnotations())
+            {
+            String qualifiedName = annotation.getQualifiedName();
+            if (EMBEDDABLE_ANNOTATIONS.contains(qualifiedName)) return true;
+            }
+
+        return false;
+        }
+
+    public static boolean ifAnySuperclassIsEmbeddable(@NotNull PsiClass clazz)
+        {
+        List<PsiClass> superclasses = getSuperclasses(clazz);
+        for (PsiClass superclass : superclasses)
+            {
+            if ((superclass != null) && ifClassIsEmbeddable(superclass)) return true;
             }
 
         return false;
@@ -62,13 +89,30 @@ final class UtilHibernateInspections
             }
         }
 
-    /** Given a class, returns a list of all its superclasses. */
+    /** Given a class, returns a list of all its superclasses, including itself. */
     @NotNull
     public static List<PsiClass> getClassAndItsSuperclasses(@NotNull PsiClass clazz)
         {
         List<PsiClass> superclasses = new ArrayList<>();
 
         PsiClass superclass = clazz;
+
+        while (superclass != null)
+            {
+            superclasses.add(superclass);
+            superclass = superclass.getSuperClass();
+            }
+
+        return superclasses;
+        }
+
+    /** Given a class, returns a list of all its superclasses (NOT including itself). */
+    @NotNull
+    public static List<PsiClass> getSuperclasses(@NotNull PsiClass clazz)
+        {
+        List<PsiClass> superclasses = new ArrayList<>();
+
+        PsiClass superclass = clazz.getSuperClass();
 
         while (superclass != null)
             {
