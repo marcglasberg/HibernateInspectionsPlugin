@@ -1,0 +1,22 @@
+<html>
+<body>
+This inspection reports when an embeddable class subclasses another embeddable class
+(both annotated with @Embeddable).
+<p>
+    As of June 2017, component inheritance is not supported by Hibernate (this may change in the future):
+
+<p>
+    More information:
+    <br>• <a href="https://hibernate.atlassian.net/browse/HHH-1152">Hibernate ORM: HHH-1152</a>
+    <br>• <a href="https://hibernate.atlassian.net/browse/HHH-1910">Hibernate ORM: HHH-1910</a>
+    <br>• <a href="https://hibernate.atlassian.net/browse/HHH-3455">Hibernate ORM: HHH-3455</a>
+    <br>• <a href="https://stackoverflow.com/questions/29278249/hibernate-embeddable-class-which-extends-another-embeddable-class-properties">Stackoverflow question</a>
+    <br>• <a href="https://stackoverflow.com/questions/917974/hibernate-embeddable-inheritance">Stackoverflow question</a>
+    <br>• <a href="https://stackoverflow.com/questions/29788716/jpa-2-0-embedded-inherited-abstract-class">Stackoverflow question</a>
+
+<p>
+    What happens when an embeddable class subclasses another embeddable class?
+    Only the direct fields of the exact subclass declared in the entity that contains the component (the embeddable object) will be persisted.
+    Also, the component creation may silently fail when loading the entity that contains the component (Hibernate will set it to null).
+</body>
+</html>

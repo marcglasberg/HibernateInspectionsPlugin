@@ -1,7 +1,7 @@
-<idea-plugin version="2">
+<idea-plugin>
     <id>marcglasberg.HibernateInspectionsPlugin</id>
     <name>Hibernate Inspections</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <vendor email="marcglasberg@gmail.com">Marcelo Glasberg</vendor>
 
     <description><![CDATA[
@@ -11,6 +11,7 @@
       <ul>
         <li>Persisted class is final</li>
         <li>Final method of a persisted class uses direct field access</li>
+        <li>Embeddable subclasses embeddable</li>
       </ul>
     ]]></description>
 
@@ -26,6 +27,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <inspectionToolProvider implementation="marcglasberg.codeInspection.AccessingFieldFromAFinalMethodOfPersistedClass_Provider" />
         <inspectionToolProvider implementation="marcglasberg.codeInspection.PersistedClassIsFinal_Provider" />
+        <inspectionToolProvider implementation="marcglasberg.codeInspection.EmbeddableSubclassesEmbeddable_Provider" />
     </extensions>
 
 </idea-plugin>

@@ -8,6 +8,7 @@ In IntelliJ IDEA, under <b>Settings > Inspections > Hibernate inspections</b> it
       <ul>
         <li>Persisted class is final</li>
         <li>Final method of a persisted class uses direct field access</li>
+        <li>Embeddable subclasses embeddable</li>
       </ul>
 
 To install it, in IntelliJ IDEA go to <b>Settings > Plugins > Browse repositories</b> and select <b>Hibernate Inspections</b>.
