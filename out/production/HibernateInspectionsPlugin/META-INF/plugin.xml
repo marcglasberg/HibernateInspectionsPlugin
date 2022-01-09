@@ -7,11 +7,24 @@
     <description><![CDATA[
       Hibernate silently fails in certain situations, leading to bugs which are difficult to track down.<br>
       This plugin helps to find and fix some of these problems.
+
+      <br>
+
       Under <b>Settings > Inspections > Hibernate inspections</b> it adds the following inspections:
       <ul>
         <li>Persisted class is final</li>
         <li>Final method of a persisted class uses direct field access</li>
         <li>Embeddable subclasses embeddable</li>
+      </ul>
+
+      <br>
+
+      Created by <b>Marcelo Glasberg</b>
+      <ul>
+        <li>https://glasberg.dev</li>
+        <li>https://github.com/marcglasberg</li>
+        <li>https://www.linkedin.com/in/marcglasberg/</li>
+        <li>https://stackoverflow.com/users/3411681/marcg</li>
       </ul>
     ]]></description>
 
