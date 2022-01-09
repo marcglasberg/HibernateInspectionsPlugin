@@ -6,13 +6,14 @@ import com.intellij.openapi.diagnostic.*;
 import com.intellij.openapi.project.*;
 import com.intellij.psi.*;
 import com.intellij.util.*;
+
 import static marcglasberg.codeInspection.UtilHibernateInspections.*;
 
 /**
- @author Marcelo Glasberg (http://stackoverflow.com/users/3411681/marcg) */
+ * @author Marcelo Glasberg (http://stackoverflow.com/users/3411681/marcg ; https://github.com/marcglasberg)
+ */
 public class AccessingFieldFromAFinalMethodOfPersistedClass_Inspection
-      extends BaseJavaLocalInspectionTool
-    {
+        extends AbstractBaseJavaLocalInspectionTool {
     private static final Logger LOG = Logger.getInstance("#marcglasberg.codeInspection.AccessingFieldFromAFinalMethodOfPersistedClass_Inspection");
 
     private final LocalQuickFix quickFix = new MyQuickFix();
@@ -31,147 +32,130 @@ public class AccessingFieldFromAFinalMethodOfPersistedClass_Inspection
 
     @Override
     @NotNull
-    public String getDisplayName()
-        {
+    public String getDisplayName() {
         return DISPLAY_NAME;
-        }
+    }
 
     @Override
     @NotNull
-    public String getShortName()
-        {
+    public String getShortName() {
         return SHORT_NAME;
-        }
+    }
 
     @Override
     @NotNull
-    public String getGroupDisplayName()
-        {
+    public String getGroupDisplayName() {
         return HIBERNATE_CHECKS__GROUP_DISPLAY_NAME;
-        }
+    }
 
     @Override
-    public boolean isEnabledByDefault()
-        {
+    public boolean isEnabledByDefault() {
         return true;
-        }
+    }
 
     @NotNull
     @Override
-    public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly)
-        {
+    public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
         return new MyJavaElementVisitor(holder);
-        }
+    }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private class MyJavaElementVisitor
-          extends JavaElementVisitor
-        {
+            extends JavaElementVisitor {
         private final ProblemsHolder holder;
 
-        public MyJavaElementVisitor(ProblemsHolder holder)
-            {
+        public MyJavaElementVisitor(ProblemsHolder holder) {
             super();
             this.holder = holder;
-            }
+        }
 
-        /** This is the core of the inspection. */
+        /**
+         * This is the core of the inspection.
+         */
         @Override
-        public void visitMethod(PsiMethod method)
-            {
+        public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
 
             // Note: Keep the order, faster checks first.
             if (!ifMethodIsFinal(method)) return;
-            if (!ifClassOfTheMehodIsPersisted(method)) return;
+            if (!ifClassOfTheMethodIsPersisted(method)) return;
             if (!ifMethodUsesDirectFieldAccess(method)) return;
 
             PsiModifierList modifierList = method.getModifierList();
             holder.registerProblem(modifierList, DESCRIPTION_TEMPLATE, quickFix);
-            }
+        }
 
-        private boolean ifMethodUsesDirectFieldAccess(@NotNull PsiMethod method)
-            {
+        private boolean ifMethodUsesDirectFieldAccess(@NotNull PsiMethod method) {
             PsiClass clazz = method.getContainingClass();
             if (clazz == null) return false;
 
             return ifPsiElementIsOrContainsAReferenceToAFieldOfItsClass(method, clazz);
-            }
+        }
 
-        /** Recursive. */
-        private boolean ifPsiElementIsOrContainsAReferenceToAFieldOfItsClass(@NotNull PsiElement psiElement, @NotNull PsiClass clazz)
-            {
+        /**
+         * Recursive.
+         */
+        private boolean ifPsiElementIsOrContainsAReferenceToAFieldOfItsClass(@NotNull PsiElement psiElement, @NotNull PsiClass clazz) {
             if (ifElementIsAReferenceToAFieldOfItsClass(psiElement, clazz)) return true;
-            else if (ifElementContainsReferenceToField(psiElement, clazz)) return true;
-            else return false;
-            }
+            else return ifElementContainsReferenceToField(psiElement, clazz);
+        }
 
-        /** Recursive. */
-        private boolean ifElementContainsReferenceToField(@NotNull PsiElement psiElement, @NotNull PsiClass clazz)
-            {
+        /**
+         * Recursive.
+         */
+        private boolean ifElementContainsReferenceToField(@NotNull PsiElement psiElement, @NotNull PsiClass clazz) {
             PsiElement[] innerPsiElements = psiElement.getChildren();
-            for (PsiElement innerPsiElement : innerPsiElements)
-                {
-                if (ifPsiElementIsOrContainsAReferenceToAFieldOfItsClass(innerPsiElement, clazz)) return true;
-                }
-            return false;
+            for (PsiElement innerPsiElement : innerPsiElements) {
+                if (ifPsiElementIsOrContainsAReferenceToAFieldOfItsClass(innerPsiElement, clazz))
+                    return true;
             }
+            return false;
+        }
 
-        private boolean ifElementIsAReferenceToAFieldOfItsClass(@NotNull PsiElement psiElement, @NotNull PsiClass clazz)
-            {
-            if (psiElement instanceof PsiReferenceExpression)
-                {
+        private boolean ifElementIsAReferenceToAFieldOfItsClass(@NotNull PsiElement psiElement, @NotNull PsiClass clazz) {
+            if (psiElement instanceof PsiReferenceExpression) {
                 // Gets the reference element.
-                PsiElement referencedElement = ((PsiReferenceExpression)psiElement).resolve();
+                PsiElement referencedElement = ((PsiReferenceExpression) psiElement).resolve();
 
                 // If the element is a field,
-                if (referencedElement instanceof PsiField)
-                    {
+                if (referencedElement instanceof PsiField) {
                     // Then check if it is a field of the class or its superclasses (it may be a field of some other unrelated class).
-                    PsiField field = (PsiField)referencedElement;
+                    PsiField field = (PsiField) referencedElement;
                     PsiClass classOfField = field.getContainingClass();
 
-                    if (getClassAndItsSuperclasses(clazz).contains(classOfField)) return true;
-                    }
+                    return getClassAndItsSuperclasses(clazz).contains(classOfField);
                 }
-            return false;
             }
+            return false;
         }
+    }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private static class MyQuickFix
-          implements LocalQuickFix
-        {
+            implements LocalQuickFix {
         @Override
         @NotNull
-        public String getName()
-            {
+        public String getName() {
             return QUICK_FIX__REMOVE_FINAL_MODIFIER;
-            }
+        }
 
         @Override
-        public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
-            {
-            try
-                {
-                PsiModifierList psiModifierList = (PsiModifierList)descriptor.getPsiElement();
-                PsiMethod method = (PsiMethod)psiModifierList.getParent();
+        public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+            try {
+                PsiModifierList psiModifierList = (PsiModifierList) descriptor.getPsiElement();
+                PsiMethod method = (PsiMethod) psiModifierList.getParent();
                 removeFinalModifier(method);
-                }
-
-            catch (IncorrectOperationException exception)
-                {
+            } catch (IncorrectOperationException exception) {
                 LOG.error(exception);
-                }
-            }
-
-        @Override
-        @NotNull
-        public String getFamilyName()
-            {
-            return getName();
             }
         }
+
+        @Override
+        @NotNull
+        public String getFamilyName() {
+            return getName();
+        }
     }
+}

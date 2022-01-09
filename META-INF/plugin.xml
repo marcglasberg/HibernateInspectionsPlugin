@@ -6,7 +6,7 @@
 
     <description><![CDATA[
       Hibernate silently fails in certain situations, leading to bugs which are difficult to track down.<br>
-      This plugin helps finding and fixing some of these problems.
+      This plugin helps to find and fix some of these problems.
       Under <b>Settings > Inspections > Hibernate inspections</b> it adds the following inspections:
       <ul>
         <li>Persisted class is final</li>

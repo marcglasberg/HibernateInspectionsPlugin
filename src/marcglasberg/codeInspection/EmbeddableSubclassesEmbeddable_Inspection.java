@@ -4,13 +4,14 @@ import org.jetbrains.annotations.*;
 import com.intellij.codeInspection.*;
 import com.intellij.openapi.diagnostic.*;
 import com.intellij.psi.*;
+
 import static marcglasberg.codeInspection.UtilHibernateInspections.*;
 
 /**
- @author Marcelo Glasberg (http://stackoverflow.com/users/3411681/marcg) */
+ * @author Marcelo Glasberg (http://stackoverflow.com/users/3411681/marcg ; https://github.com/marcglasberg)
+ */
 public class EmbeddableSubclassesEmbeddable_Inspection
-      extends BaseJavaLocalInspectionTool
-    {
+        extends AbstractBaseJavaLocalInspectionTool {
     private static final Logger LOG = Logger.getInstance("#marcglasberg.codeInspection.EmbeddableSubclassesEmbeddable_Inspection");
 
     // ---
@@ -23,53 +24,51 @@ public class EmbeddableSubclassesEmbeddable_Inspection
 
     private static final String SHORT_NAME = "EmbeddableSubclassesEmbeddable";
 
+    @NotNull
     @Override
-    public String getDisplayName()
-        {
+    public String getDisplayName() {
         return DISPLAY_NAME;
-        }
+    }
 
+    @NotNull
     @Override
-    public String getShortName()
-        {
+    public String getShortName() {
         return SHORT_NAME;
-        }
+    }
 
+    @NotNull
     @Override
-    public String getGroupDisplayName()
-        {
+    public String getGroupDisplayName() {
         return HIBERNATE_CHECKS__GROUP_DISPLAY_NAME;
-        }
+    }
 
     @Override
-    public boolean isEnabledByDefault()
-        {
+    public boolean isEnabledByDefault() {
         return true;
-        }
+    }
 
+    @NotNull
     @Override
-    public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly)
-        {
+    public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
         return new MyJavaElementVisitor(holder);
-        }
+    }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private class MyJavaElementVisitor
-          extends JavaElementVisitor
-        {
+            extends JavaElementVisitor {
         private final ProblemsHolder holder;
 
-        public MyJavaElementVisitor(ProblemsHolder holder)
-            {
+        public MyJavaElementVisitor(ProblemsHolder holder) {
             super();
             this.holder = holder;
-            }
+        }
 
-        /** This is the core of the inspection. */
+        /**
+         * This is the core of the inspection.
+         */
         @Override
-        public void visitClass(PsiClass clazz)
-            {
+        public void visitClass(PsiClass clazz) {
             super.visitClass(clazz);
 
             // Note: Keep the order, faster checks first.
@@ -80,9 +79,9 @@ public class EmbeddableSubclassesEmbeddable_Inspection
             if (modifierList == null) return;
 
             holder.registerProblem(modifierList, DESCRIPTION_TEMPLATE, null);
-            }
         }
+    }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    }
+}
