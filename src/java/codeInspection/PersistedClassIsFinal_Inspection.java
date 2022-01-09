@@ -1,20 +1,26 @@
-package marcglasberg.codeInspection;
+package java.codeInspection;
 
-import org.jetbrains.annotations.*;
-import com.intellij.codeInspection.*;
-import com.intellij.openapi.diagnostic.*;
-import com.intellij.openapi.project.*;
-import com.intellij.psi.*;
-import com.intellij.util.*;
+import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
+import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.JavaElementVisitor;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiModifierList;
+import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.NotNull;
 
-import static marcglasberg.codeInspection.UtilHibernateInspections.*;
+import static java.codeInspection.UtilHibernateInspections.*;
 
 /**
- * @author Marcelo Glasberg (http://stackoverflow.com/users/3411681/marcg ; https://github.com/marcglasberg)
+ * @author Marcelo Glasberg (http://stackoverflow.com/users/3411681/marcg ; https://github.com/java)
  */
 public class PersistedClassIsFinal_Inspection
         extends AbstractBaseJavaLocalInspectionTool {
-    private static final Logger LOG = Logger.getInstance("#marcglasberg.codeInspection.PersistedClassIsFinal_Inspection");
+    private static final Logger LOG = Logger.getInstance("#java.codeInspection.PersistedClassIsFinal_Inspection");
 
     private final LocalQuickFix quickFix = new MyQuickFix();
 

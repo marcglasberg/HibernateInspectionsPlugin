@@ -1,0 +1,44 @@
+<idea-plugin>
+    <id>marcglasberg.HibernateInspectionsPlugin</id>
+    <name>Hibernate Inspections</name>
+    <version>1.2</version>
+    <vendor email="marcglasberg@gmail.com">Marcelo Glasberg</vendor>
+
+    <description><![CDATA[
+      Hibernate silently fails in certain situations, leading to bugs which are difficult to track down.<br>
+      This plugin helps to find and fix some of these problems.
+      Under <b>Settings > Inspections > Hibernate inspections</b> it adds the following inspections:
+      <ul>
+        <li>Persisted class is final</li>
+        <li>Final method of a persisted class uses direct field access</li>
+        <li>Embeddable subclasses embeddable</li>
+      </ul>
+    ]]></description>
+
+    <change-notes><![CDATA[
+    If you wish to contribute and add more inspections,
+    this plugin is in <a href="https://github.com/marcglasberg/HibernateInspectionsPlugin/tree/master">GitHub</a>.
+    ]]>
+    </change-notes>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
+    <idea-version since-build="173.0"/>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <inspectionToolProvider
+                implementation="java.codeInspection.AccessingFieldFromAFinalMethodOfPersistedClass_Provider"/>
+        <inspectionToolProvider
+                implementation="java.codeInspection.PersistedClassIsFinal_Provider"/>
+        <inspectionToolProvider
+                implementation="java.codeInspection.EmbeddableSubclassesEmbeddable_Provider"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+
+</idea-plugin>

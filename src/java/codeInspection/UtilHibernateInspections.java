@@ -1,4 +1,4 @@
-package marcglasberg.codeInspection;
+package java.codeInspection;
 
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Marcelo Glasberg (http://stackoverflow.com/users/3411681/marcg ; https://github.com/marcglasberg)
+ * @author Marcelo Glasberg (http://stackoverflow.com/users/3411681/marcg ; https://github.com/java)
  */
 final class UtilHibernateInspections {
 

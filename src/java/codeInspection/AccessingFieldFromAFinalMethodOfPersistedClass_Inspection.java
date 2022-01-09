@@ -1,20 +1,23 @@
-package marcglasberg.codeInspection;
+package java.codeInspection;
 
-import org.jetbrains.annotations.*;
-import com.intellij.codeInspection.*;
-import com.intellij.openapi.diagnostic.*;
-import com.intellij.openapi.project.*;
+import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
+import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.util.*;
+import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.NotNull;
 
-import static marcglasberg.codeInspection.UtilHibernateInspections.*;
+import static java.codeInspection.UtilHibernateInspections.*;
 
 /**
- * @author Marcelo Glasberg (http://stackoverflow.com/users/3411681/marcg ; https://github.com/marcglasberg)
+ * @author Marcelo Glasberg (http://stackoverflow.com/users/3411681/marcg ; https://github.com/java)
  */
 public class AccessingFieldFromAFinalMethodOfPersistedClass_Inspection
         extends AbstractBaseJavaLocalInspectionTool {
-    private static final Logger LOG = Logger.getInstance("#marcglasberg.codeInspection.AccessingFieldFromAFinalMethodOfPersistedClass_Inspection");
+    private static final Logger LOG = Logger.getInstance("#java.codeInspection.AccessingFieldFromAFinalMethodOfPersistedClass_Inspection");
 
     private final LocalQuickFix quickFix = new MyQuickFix();
 

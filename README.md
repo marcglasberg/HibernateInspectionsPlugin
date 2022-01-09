@@ -1,7 +1,7 @@
 <h1>Hibernate Inspections Plugin for IntelliJ IDEA</h1>
 
 Hibernate silently fails in certain situations, leading to bugs which are difficult to track down.
-This plugin helps finding and fixing some of these problems.
+This plugin helps to find and fix some of these problems.
 <br>
 
 In IntelliJ IDEA, under <b>Settings > Inspections > Hibernate inspections</b> it adds the following inspections:
