@@ -60,7 +60,7 @@ More information:
 * <a href="http://stackoverflow.com/questions/6608222/does-a-final-method-prevent-hibernate-from-creating-a-proxy-for-such-an-entity">
   Stackoverflow question</a>
 
-# Inspection: Final method of a persisted class uses direct field access
+# Final method of a persisted class uses direct field access
 
 This inspection reports when a final method of a persisted class (persisted with Hibernate or
 similar, annotated with `@Entity`, `@MappedSuperclass`, or `@Embeddable`) uses direct field access.
@@ -113,7 +113,7 @@ public final long getId() {
         Stackoverflow question</a></li>
 </ul>
 
-# Inspection: Embeddable subclasses embeddable
+# Embeddable subclasses embeddable
 
 This inspection reports when an embeddable class subclasses another embeddable class (both annotated
 with @Embeddable).
