@@ -5,7 +5,12 @@
     <vendor email="marcglasberg@gmail.com">Marcelo Glasberg</vendor>
 
     <description><![CDATA[
-      Hibernate silently fails in certain situations, leading to bugs which are difficult to track down.<br>
+
+      ## Do I need this plugin?
+
+      <br>
+
+      Yes! Hibernate silently fails in certain situations, leading to bugs which are difficult to track down.<br>
       This plugin helps to find and fix some of these problems.
 
       <br>
