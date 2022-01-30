@@ -1,4 +1,4 @@
-package java.codeInspection;
+package codeInspection;
 
 import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -9,14 +9,14 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiModifierList;
 import org.jetbrains.annotations.NotNull;
 
-import static java.codeInspection.UtilHibernateInspections.*;
+import static codeInspection.UtilHibernateInspections.*;
 
 /**
  * @author Marcelo Glasberg (http://stackoverflow.com/users/3411681/marcg ; https://github.com/java)
  */
 public class EmbeddableSubclassesEmbeddable_Inspection
         extends AbstractBaseJavaLocalInspectionTool {
-    private static final Logger LOG = Logger.getInstance("#java.codeInspection.EmbeddableSubclassesEmbeddable_Inspection");
+    private static final Logger LOG = Logger.getInstance("#EmbeddableSubclassesEmbeddable_Inspection");
 
     // ---
 

@@ -1,4 +1,4 @@
-package java.codeInspection;
+package codeInspection;
 
 import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -13,14 +13,14 @@ import com.intellij.psi.PsiModifierList;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 
-import static java.codeInspection.UtilHibernateInspections.*;
+import static codeInspection.UtilHibernateInspections.*;
 
 /**
  * @author Marcelo Glasberg (http://stackoverflow.com/users/3411681/marcg ; https://github.com/java)
  */
 public class PersistedClassIsFinal_Inspection
         extends AbstractBaseJavaLocalInspectionTool {
-    private static final Logger LOG = Logger.getInstance("#java.codeInspection.PersistedClassIsFinal_Inspection");
+    private static final Logger LOG = Logger.getInstance("#PersistedClassIsFinal_Inspection");
 
     private final LocalQuickFix quickFix = new MyQuickFix();
 

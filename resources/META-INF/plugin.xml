@@ -1,8 +1,37 @@
 <idea-plugin>
     <id>marcglasberg.HibernateInspectionsPlugin</id>
     <name>Hibernate Inspections</name>
-    <version>1.4</version>
+    <version>1.5</version>
     <vendor email="marcglasberg@gmail.com">Marcelo Glasberg</vendor>
+
+    <change-notes><![CDATA[
+    If you wish to contribute and add more inspections,
+    this plugin is in <a href="https://github.com/marcglasberg/HibernateInspectionsPlugin/tree/master">GitHub</a>.
+    ]]>
+    </change-notes>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
+    <idea-version since-build="173.0"/>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <!--    <depends>com.intellij.modules.java</depends>-->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <inspectionToolProvider
+                implementation="codeInspection.AccessingFieldFromAFinalMethodOfPersistedClass_Provider"/>
+        <inspectionToolProvider
+                implementation="codeInspection.PersistedClassIsFinal_Provider"/>
+        <inspectionToolProvider
+                implementation="codeInspection.EmbeddableSubclassesEmbeddable_Provider"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
 
     <description><![CDATA[
 
@@ -10,8 +39,11 @@
 
       <br>
 
-      Yes! Hibernate silently fails in certain situations, leading to bugs which are difficult to track down.<br>
-      This plugin helps to find and fix some of these problems.
+      Yes! Hibernate silently fails in certain situations, without telling you where and why it is
+      failing. It may even do the wrong thing, without giving you any warnings.
+      This leads to bugs which can be very difficult to track down and fix.<br>
+
+      This plugin helps you find and fix these problems.
 
       <br>
 
@@ -151,31 +183,5 @@ the component (Hibernate will set it to `null`).
 
     ]]></description>
 
-    <change-notes><![CDATA[
-    If you wish to contribute and add more inspections,
-    this plugin is in <a href="https://github.com/marcglasberg/HibernateInspectionsPlugin/tree/master">GitHub</a>.
-    ]]>
-    </change-notes>
-
-    <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <idea-version since-build="173.0"/>
-
-    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
-         on how to target different products -->
-    <depends>com.intellij.modules.platform</depends>
-    <depends>com.intellij.modules.java</depends>.
-
-    <extensions defaultExtensionNs="com.intellij">
-        <inspectionToolProvider
-                implementation="java.codeInspection.AccessingFieldFromAFinalMethodOfPersistedClass_Provider"/>
-        <inspectionToolProvider
-                implementation="java.codeInspection.PersistedClassIsFinal_Provider"/>
-        <inspectionToolProvider
-                implementation="java.codeInspection.EmbeddableSubclassesEmbeddable_Provider"/>
-    </extensions>
-
-    <actions>
-        <!-- Add your actions here -->
-    </actions>
 
 </idea-plugin>

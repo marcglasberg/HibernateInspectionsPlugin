@@ -2,14 +2,18 @@
 
 https://plugins.jetbrains.com/plugin/7866-hibernate-inspections
 
-_To install this plugin, in IntelliJ IDEA go to <b>Settings > Plugins > Browse repositories</b>, and select <b>
+_To install this plugin, in IntelliJ IDEA go to <b>Settings > Plugins > Browse repositories</b>, and
+select <b>
 "Hibernate Inspections"</b>._
-
 
 ## Do I need this plugin?
 
-Yes! Hibernate silently fails in certain situations, leading to bugs which are difficult to track down.
-This plugin helps to find and fix some of these problems.
+Yes! Hibernate silently fails in certain situations, without telling you where and why it is
+failing. It may even do the wrong thing, without giving you any warnings. This leads to bugs which
+can be very difficult to track down and fix.<br>
+
+This plugin helps you find and fix these problems.
+
 <br>
 
 In IntelliJ IDEA, under <b>Settings > Inspections > Hibernate inspections</b> it adds the following
@@ -19,7 +23,6 @@ inspections:
 <li>Final method of a persisted class uses direct field access</li>
 <li>Embeddable subclasses embeddable</li>
 </ul>
-
 
 # Persisted class is final
 

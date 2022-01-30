@@ -1,4 +1,4 @@
-package java.codeInspection;
+package codeInspection;
 
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;

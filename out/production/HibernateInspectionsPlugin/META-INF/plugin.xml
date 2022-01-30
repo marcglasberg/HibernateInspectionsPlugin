@@ -1,11 +1,45 @@
 <idea-plugin>
     <id>marcglasberg.HibernateInspectionsPlugin</id>
     <name>Hibernate Inspections</name>
-    <version>1.4</version>
+    <version>1.5</version>
     <vendor email="marcglasberg@gmail.com">Marcelo Glasberg</vendor>
 
+    <change-notes><![CDATA[
+    If you wish to contribute and add more inspections,
+    this plugin is in <a href="https://github.com/marcglasberg/HibernateInspectionsPlugin/tree/master">GitHub</a>.
+    ]]>
+    </change-notes>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
+    <idea-version since-build="173.0"/>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <!--    <depends>com.intellij.modules.java</depends>-->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <inspectionToolProvider
+                implementation="codeInspection.AccessingFieldFromAFinalMethodOfPersistedClass_Provider"/>
+        <inspectionToolProvider
+                implementation="codeInspection.PersistedClassIsFinal_Provider"/>
+        <inspectionToolProvider
+                implementation="codeInspection.EmbeddableSubclassesEmbeddable_Provider"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+
     <description><![CDATA[
-      Hibernate silently fails in certain situations, leading to bugs which are difficult to track down.<br>
+
+      ## Do I need this plugin?
+
+      <br>
+
+      Yes! Hibernate silently fails in certain situations, leading to bugs which are difficult to track down.<br>
       This plugin helps to find and fix some of these problems.
 
       <br>
@@ -66,7 +100,7 @@ More information:
 * <a href="http://stackoverflow.com/questions/6608222/does-a-final-method-prevent-hibernate-from-creating-a-proxy-for-such-an-entity">
   Stackoverflow question</a>
 
-# Inspection: Final method of a persisted class uses direct field access
+# Final method of a persisted class uses direct field access
 
 This inspection reports when a final method of a persisted class (persisted with Hibernate or
 similar, annotated with `@Entity`, `@MappedSuperclass`, or `@Embeddable`) uses direct field access.
@@ -119,7 +153,7 @@ public final long getId() {
         Stackoverflow question</a></li>
 </ul>
 
-# Inspection: Embeddable subclasses embeddable
+# Embeddable subclasses embeddable
 
 This inspection reports when an embeddable class subclasses another embeddable class (both annotated
 with @Embeddable).
@@ -146,31 +180,5 @@ the component (Hibernate will set it to `null`).
 
     ]]></description>
 
-    <change-notes><![CDATA[
-    If you wish to contribute and add more inspections,
-    this plugin is in <a href="https://github.com/marcglasberg/HibernateInspectionsPlugin/tree/master">GitHub</a>.
-    ]]>
-    </change-notes>
-
-    <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <idea-version since-build="173.0"/>
-
-    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
-         on how to target different products -->
-    <depends>com.intellij.modules.platform</depends>
-    <depends>com.intellij.modules.java</depends>.
-
-    <extensions defaultExtensionNs="com.intellij">
-        <inspectionToolProvider
-                implementation="java.codeInspection.AccessingFieldFromAFinalMethodOfPersistedClass_Provider"/>
-        <inspectionToolProvider
-                implementation="java.codeInspection.PersistedClassIsFinal_Provider"/>
-        <inspectionToolProvider
-                implementation="java.codeInspection.EmbeddableSubclassesEmbeddable_Provider"/>
-    </extensions>
-
-    <actions>
-        <!-- Add your actions here -->
-    </actions>
 
 </idea-plugin>
