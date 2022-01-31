@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>marcglasberg.HibernateInspectionsPlugin</id>
     <name>Hibernate Inspections</name>
-    <version>1.5</version>
+    <version>1.6</version>
     <vendor email="marcglasberg@gmail.com">Marcelo Glasberg</vendor>
 
     <change-notes><![CDATA[
@@ -11,7 +11,7 @@
     </change-notes>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <idea-version since-build="173.0"/>
+    <idea-version since-build="192.0"/>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
