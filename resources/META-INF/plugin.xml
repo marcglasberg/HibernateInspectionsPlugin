@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>marcglasberg.HibernateInspectionsPlugin</id>
     <name>Hibernate Inspections</name>
-    <version>1.6</version>
+    <version>1.7</version>
     <vendor email="marcglasberg@gmail.com">Marcelo Glasberg</vendor>
 
     <change-notes><![CDATA[
