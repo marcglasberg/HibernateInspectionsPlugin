@@ -19,9 +19,9 @@ This plugin helps you find and fix these problems.
 In IntelliJ IDEA, under <b>Settings > Inspections > Hibernate inspections</b> it adds the following
 inspections:
 <ul>
-<li>Persisted class is final</li>
-<li>Final method of a persisted class uses direct field access</li>
-<li>Embeddable subclasses embeddable</li>
+  <li>Persisted class is final</li>
+  <li>Final method of a persisted class uses direct field access</li>
+  <li>Embeddable subclasses embeddable</li>
 </ul>
 
 # Persisted class is final
@@ -47,7 +47,9 @@ There are 3 ways to solve this:
 <blockquote>
     <pre>@Entity @Proxy(lazy=false) public class Cat { ... }</pre>
 </blockquote>
+
 • Third is to tell Hibernate to use the interface instead (possible only when the final class implements a proper "full" interface):
+
 <blockquote>
 <pre>@Entity @Proxy(proxyClass=ICat.class) public class Cat implements ICat { ... }</pre>
 </blockquote>
@@ -60,7 +62,7 @@ More information:
 * <a href="https://docs.jboss.org/hibernate/orm/5.0/manual/en-US/html/ch04.html#persistent-classes-pojo-final-example-disable-proxies-ann">
   Hibernate Docs</a>
 
-* <a href="http://stackoverflow.com/questions/6608222/does-a-final-method-prevent-hibernate-from-creating-a-proxy-for-such-an-entity">
+* <a href="https://stackoverflow.com/questions/6608222/does-a-final-method-prevent-hibernate-from-creating-a-proxy-for-such-an-entity">
   Stackoverflow question</a>
 
 # Final method of a persisted class uses direct field access
@@ -112,7 +114,7 @@ public final long getId() {
 
 <ul>
     <li><a href="https://youtrack.jetbrains.com/issue/IDEA-128132">Relevant IntelliJ IDEA bug report</a></li>
-    <li><a href="http://stackoverflow.com/questions/6608222/does-a-final-method-prevent-hibernate-from-creating-a-proxy-for-such-an-entity">
+    <li><a href="https://stackoverflow.com/questions/6608222/does-a-final-method-prevent-hibernate-from-creating-a-proxy-for-such-an-entity">
         Stackoverflow question</a></li>
 </ul>
 

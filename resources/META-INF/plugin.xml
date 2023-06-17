@@ -1,23 +1,16 @@
 <idea-plugin>
     <id>marcglasberg.HibernateInspectionsPlugin</id>
     <name>Hibernate Inspections</name>
-    <version>1.7</version>
-    <vendor email="marcglasberg@gmail.com">Marcelo Glasberg</vendor>
-
-    <change-notes><![CDATA[
-    If you wish to contribute and add more inspections,
-    this plugin is in <a href="https://github.com/marcglasberg/HibernateInspectionsPlugin/tree/master">GitHub</a>.
-    ]]>
-    </change-notes>
+    <vendor email="marcglasberg@gmail.com" url="https://glasberg.dev/">Marcelo Glasberg</vendor>
+    <version>1.8</version>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <idea-version since-build="192.0"/>
+    <idea-version since-build="231.0"/>
 
-    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
-         on how to target different products -->
+    <!-- See https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html on how to target different products -->
+    <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.java</depends>
-    <depends>com.intellij.modules.lang</depends>
     <!--    <depends>com.intellij.modules.java</depends>-->
 
     <extensions defaultExtensionNs="com.intellij">
@@ -35,36 +28,39 @@
 
     <description><![CDATA[
 
-      ## Do I need this plugin?
+<h1>Do I need this plugin?</h1>
 
-      <br>
+Yes! Hibernate silently fails in certain situations, without telling you where and why it is
+failing. It may even do the wrong thing, without giving you any warnings.
+This leads to bugs which can be very difficult to track down and fix.
 
-      Yes! Hibernate silently fails in certain situations, without telling you where and why it is
-      failing. It may even do the wrong thing, without giving you any warnings.
-      This leads to bugs which can be very difficult to track down and fix.<br>
+<br>
 
-      This plugin helps you find and fix these problems.
+This plugin helps you find and fix these problems.
 
-      <br>
+<br>
 
-      Under <b>Settings > Inspections > Hibernate inspections</b> it adds the following inspections:
-      <ul>
-        <li>Persisted class is final</li>
-        <li>Final method of a persisted class uses direct field access</li>
-        <li>Embeddable subclasses embeddable</li>
-      </ul>
+Under <b>Settings > Inspections > Hibernate inspections</b> it adds the following inspections:
 
-      <br>
+<ul>
+    <li>Persisted class is final</li>
+    <li>Final method of a persisted class uses direct field access</li>
+    <li>Embeddable subclasses embeddable</li>
+</ul>
 
-      Created by <b>Marcelo Glasberg</b>
-      <ul>
-        <li>https://glasberg.dev</li>
-        <li>https://github.com/marcglasberg</li>
-        <li>https://www.linkedin.com/in/marcglasberg/</li>
-        <li>https://stackoverflow.com/users/3411681/marcg</li>
-      </ul>
+<br>
 
-      # Persisted class is final
+Created by <b>Marcelo Glasberg</b>
+<ul>
+    <li>https://glasberg.dev</li>
+    <li>https://github.com/marcglasberg</li>
+    <li>https://www.linkedin.com/in/marcglasberg/</li>
+    <li>https://stackoverflow.com/users/3411681/marcg</li>
+</ul>
+
+<br>&nbsp;<br>
+
+<h2>Persisted class is final</h2>
 
 This inspection reports when a persisted class is final
 (persisted with Hibernate or similar, annotated with `@Entity`, `@MappedSuperclass`,
@@ -100,10 +96,12 @@ More information:
 * <a href="https://docs.jboss.org/hibernate/orm/5.0/manual/en-US/html/ch04.html#persistent-classes-pojo-final-example-disable-proxies-ann">
   Hibernate Docs</a>
 
-* <a href="http://stackoverflow.com/questions/6608222/does-a-final-method-prevent-hibernate-from-creating-a-proxy-for-such-an-entity">
+* <a href="https://stackoverflow.com/questions/6608222/does-a-final-method-prevent-hibernate-from-creating-a-proxy-for-such-an-entity">
   Stackoverflow question</a>
 
-# Final method of a persisted class uses direct field access
+<br>&nbsp;<br>
+
+<h2>Final method of a persisted class uses direct field access</h2>
 
 This inspection reports when a final method of a persisted class (persisted with Hibernate or
 similar, annotated with `@Entity`, `@MappedSuperclass`, or `@Embeddable`) uses direct field access.
@@ -152,11 +150,13 @@ public final long getId() {
 
 <ul>
     <li><a href="https://youtrack.jetbrains.com/issue/IDEA-128132">Relevant IntelliJ IDEA bug report</a></li>
-    <li><a href="http://stackoverflow.com/questions/6608222/does-a-final-method-prevent-hibernate-from-creating-a-proxy-for-such-an-entity">
+    <li><a href="https://stackoverflow.com/questions/6608222/does-a-final-method-prevent-hibernate-from-creating-a-proxy-for-such-an-entity">
         Stackoverflow question</a></li>
 </ul>
 
-# Embeddable subclasses embeddable
+<br>&nbsp;<br>
+
+<h2>Embeddable subclasses embeddable</h2>
 
 This inspection reports when an embeddable class subclasses another embeddable class (both annotated
 with @Embeddable).
@@ -183,5 +183,10 @@ the component (Hibernate will set it to `null`).
 
     ]]></description>
 
+    <change-notes><![CDATA[
+    If you wish to contribute and add more inspections,
+    this plugin is in <a href="https://github.com/marcglasberg/HibernateInspectionsPlugin/tree/master">GitHub</a>.
+    ]]>
+    </change-notes>
 
 </idea-plugin>
