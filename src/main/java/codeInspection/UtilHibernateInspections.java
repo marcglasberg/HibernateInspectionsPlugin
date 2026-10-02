@@ -1,49 +1,52 @@
 package codeInspection;
 
 import com.intellij.psi.*;
+import com.intellij.psi.util.PsiUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Marcelo Glasberg (<a href="https://stackoverflow.com/users/3411681/marcg">Stack Overflow</a> ; <a href="https://https://github.com/marcglasberg">GitHub</a>)
+ * @author Marcelo Glasberg (<a href="https://stackoverflow.com/users/3411681/marcg">Stack Overflow</a> ; <a href="https://github.com/marcglasberg">GitHub</a>)
  */
 final class UtilHibernateInspections {
 
-    static final String HIBERNATE_CHECKS__GROUP_DISPLAY_NAME = "Hibernate inspections";
-
-    private static final List<String> PERSISTENCE_ANNOTATIONS = Arrays.asList("javax.persistence.Entity",
+    // JPA 2 (javax.persistence) and Jakarta Persistence 3+ (jakarta.persistence, used by Hibernate 6+).
+    private static final List<String> PERSISTENCE_ANNOTATIONS = List.of(
+            "javax.persistence.Entity",
             "javax.persistence.MappedSuperclass",
-            "javax.persistence.Embeddable");
+            "javax.persistence.Embeddable",
+            "jakarta.persistence.Entity",
+            "jakarta.persistence.MappedSuperclass",
+            "jakarta.persistence.Embeddable");
 
-    private static final List<String> EMBEDDABLE_ANNOTATIONS = Collections.singletonList("javax.persistence.Embeddable");
+    private static final List<String> EMBEDDABLE_ANNOTATIONS = List.of(
+            "javax.persistence.Embeddable",
+            "jakarta.persistence.Embeddable");
+
+    // This class was added in Hibernate 6.6, the first version to support @Embeddable inheritance.
+    private static final String HIBERNATE_6_6_MARKER_CLASS = "org.hibernate.metamodel.mapping.EmbeddableDiscriminatorMapping";
 
     private UtilHibernateInspections() {
     }
 
     public static boolean ifClassIsPersisted(@NotNull PsiClass clazz) {
-        PsiModifierList classModifierList = clazz.getModifierList();
-        if (classModifierList == null) return false;
-
-        for (PsiAnnotation annotation : classModifierList.getAnnotations()) {
-            String qualifiedName = annotation.getQualifiedName();
-            if (PERSISTENCE_ANNOTATIONS.contains(qualifiedName)) return true;
-        }
-
-        return false;
+        return ifClassHasAnyOfTheAnnotations(clazz, PERSISTENCE_ANNOTATIONS);
     }
 
     public static boolean ifClassIsEmbeddable(@NotNull PsiClass clazz) {
+        return ifClassHasAnyOfTheAnnotations(clazz, EMBEDDABLE_ANNOTATIONS);
+    }
+
+    private static boolean ifClassHasAnyOfTheAnnotations(@NotNull PsiClass clazz, @NotNull List<String> annotations) {
         PsiModifierList classModifierList = clazz.getModifierList();
         if (classModifierList == null) return false;
 
         for (PsiAnnotation annotation : classModifierList.getAnnotations()) {
             String qualifiedName = annotation.getQualifiedName();
-            if (EMBEDDABLE_ANNOTATIONS.contains(qualifiedName)) return true;
+            if (annotations.contains(qualifiedName)) return true;
         }
 
         return false;
@@ -56,6 +59,15 @@ final class UtilHibernateInspections {
         }
 
         return false;
+    }
+
+    /**
+     * Returns true if the Hibernate version in the classpath of the given class is 6.6 or newer,
+     * which supports @Embeddable inheritance.
+     */
+    public static boolean ifHibernateSupportsEmbeddableInheritance(@NotNull PsiClass clazz) {
+        return JavaPsiFacade.getInstance(clazz.getProject())
+                .findClass(HIBERNATE_6_6_MARKER_CLASS, clazz.getResolveScope()) != null;
     }
 
     public static boolean ifClassOfTheMethodIsPersisted(@NotNull PsiMethod method) {
@@ -75,6 +87,21 @@ final class UtilHibernateInspections {
     public static boolean ifMethodIsFinal(@NotNull PsiMethod method) {
         PsiModifierList methodModifierList = method.getModifierList();
         return methodModifierList.hasModifierProperty(PsiModifier.FINAL);
+    }
+
+    public static boolean ifMethodIsStatic(@NotNull PsiMethod method) {
+        return method.hasModifierProperty(PsiModifier.STATIC);
+    }
+
+    /**
+     * Returns the explicit `final` keyword of the class or method, or null if there is none.
+     * Note: Implicitly final classes (like records) have no `final` keyword.
+     */
+    @Nullable
+    public static PsiElement findFinalKeyword(@NotNull PsiModifierListOwner owner) {
+        PsiModifierList modifierList = owner.getModifierList();
+        if (modifierList == null) return null;
+        else return PsiUtil.findModifierInList(modifierList, PsiModifier.FINAL);
     }
 
     public static void removeFinalModifier(@Nullable PsiModifierListOwner clazz) {

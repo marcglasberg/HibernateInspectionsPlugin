@@ -1,0 +1,55 @@
+<html lang="en">
+<body>
+Reports <code>final</code> methods that use a field directly, in classes marked with <code>@Entity</code>,
+<code>@MappedSuperclass</code> or <code>@Embeddable</code>.
+<!-- tooltip end -->
+<p>
+    This is almost always a bug, and it fails silently. To load data only when it's needed ("lazy loading"),
+    Hibernate creates a subclass of your class, called a <i>proxy</i>, and its fields are always empty.
+    The proxy can't override a <code>final</code> method, so when you call that method on a proxy, it reads the
+    proxy's empty fields. You get <code>null</code>, <code>0</code> or <code>false</code> instead of the real value,
+    and no error.
+</p>
+<p>Example:</p>
+<pre><code>
+@Entity
+public class Cat {
+    private String name;
+
+    public final String getName() {   // Warning
+        return name;
+    }
+}
+</code></pre>
+<p>
+    <b>How to fix it:</b> remove <code>final</code> from the method (the quick-fix does this for you),
+    or don't use fields directly in <code>final</code> methods. For example, call <code>getName()</code>
+    instead of reading <code>name</code>.
+</p>
+<p>
+    Static methods and static fields are not reported, because proxies don't affect them.
+</p>
+<p>
+    <b>When it's OK to ignore the warning:</b> a <code>final getId()</code> can get the id from the proxy,
+    without loading the whole object from the database:
+</p>
+<pre><code>
+@SuppressWarnings("AccessingFieldFromAFinalMethodOfPersistedClass")
+public final long getId() {
+    if (this instanceof HibernateProxy) {
+        return (long) ((HibernateProxy) this).getHibernateLazyInitializer().getIdentifier();
+    } else {
+        return id;
+    }
+}
+</code></pre>
+<p>
+    The <code>@SuppressWarnings</code> line turns off the warning for this method only.
+</p>
+<p>
+    More information:
+    <a href="https://youtrack.jetbrains.com/issue/IDEA-128132">IntelliJ IDEA issue</a>,
+    <a href="https://stackoverflow.com/questions/6608222/does-a-final-method-prevent-hibernate-from-creating-a-proxy-for-such-an-entity">Stack Overflow question</a>.
+</p>
+</body>
+</html>

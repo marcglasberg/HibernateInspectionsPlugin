@@ -1,0 +1,38 @@
+<html lang="en">
+<body>
+Reports <code>@Embeddable</code> classes that extend another <code>@Embeddable</code> class,
+when the project uses a Hibernate version older than 6.6.
+<!-- tooltip end -->
+<p>
+    Before version 6.6, Hibernate doesn't support this. It saves only the fields declared in the exact class used
+    in the entity, not the fields of its parent class. Also, when loading the entity, Hibernate may silently set the
+    whole embedded object to <code>null</code>.
+</p>
+<p>Example:</p>
+<pre><code>
+@Embeddable
+public class Address { ... }
+
+@Embeddable
+public class HomeAddress extends Address { ... }   // Warning
+</code></pre>
+<p>
+    <b>How to fix it:</b> don't extend one <code>@Embeddable</code> class from another
+    (for example, copy the fields into the subclass), or upgrade to Hibernate 6.6 or newer.
+</p>
+<p>
+    Hibernate 6.6 and newer <a href="https://in.relation.to/2024/07/12/embeddable-inheritance/">support this</a>.
+    If your project uses Hibernate 6.6 or newer, this warning is not shown.
+</p>
+<p>
+    More information:
+    Hibernate issues <a href="https://hibernate.atlassian.net/browse/HHH-1152">HHH-1152</a>,
+    <a href="https://hibernate.atlassian.net/browse/HHH-1910">HHH-1910</a> and
+    <a href="https://hibernate.atlassian.net/browse/HHH-3455">HHH-3455</a>;
+    Stack Overflow questions
+    <a href="https://stackoverflow.com/questions/29278249/hibernate-embeddable-class-which-extends-another-embeddable-class-properties">1</a>,
+    <a href="https://stackoverflow.com/questions/917974/hibernate-embeddable-inheritance">2</a> and
+    <a href="https://stackoverflow.com/questions/29788716/jpa-2-0-embedded-inherited-abstract-class">3</a>.
+</p>
+</body>
+</html>

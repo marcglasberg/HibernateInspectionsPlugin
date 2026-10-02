@@ -1,0 +1,153 @@
+<!--
+    Plugin Configuration File: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html
+
+    Note: <version> and <idea-version> are NOT here. They are added at build time by the Gradle build
+    (see `version` in gradle.properties, and `sinceBuild` in build.gradle.kts).
+-->
+<idea-plugin>
+    <id>marcglasberg.HibernateInspectionsPlugin</id>
+    <name>Hibernate Inspections</name>
+    <vendor email="marcglasberg@gmail.com" url="https://glasberg.dev/">Marcelo Glasberg</vendor>
+
+    <!-- See https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!--
+            The shortName is the name used in @SuppressWarnings, and the name of the description file in
+            resources/inspectionDescriptions. Never change it, or users' existing suppressions will stop working.
+        -->
+        <localInspection
+                language="JAVA"
+                shortName="PersistedClassIsFinal"
+                displayName="Persisted class is final"
+                groupName="Hibernate inspections"
+                enabledByDefault="true"
+                level="WARNING"
+                implementationClass="codeInspection.PersistedClassIsFinal_Inspection"/>
+        <localInspection
+                language="JAVA"
+                shortName="AccessingFieldFromAFinalMethodOfPersistedClass"
+                displayName="Final method of a persisted class uses direct field access"
+                groupName="Hibernate inspections"
+                enabledByDefault="true"
+                level="WARNING"
+                implementationClass="codeInspection.AccessingFieldFromAFinalMethodOfPersistedClass_Inspection"/>
+        <localInspection
+                language="JAVA"
+                shortName="EmbeddableSubclassesEmbeddable"
+                displayName="Embeddable subclasses embeddable"
+                groupName="Hibernate inspections"
+                enabledByDefault="true"
+                level="WARNING"
+                implementationClass="codeInspection.EmbeddableSubclassesEmbeddable_Inspection"/>
+    </extensions>
+
+    <description><![CDATA[
+<p>
+Finds Hibernate bugs that fail silently, and shows them as warnings in your code.
+</p>
+
+<p>
+In some cases Hibernate doesn't work correctly, but doesn't show any error either.
+For example, a field may be <code>null</code> when it shouldn't be, or some data may not be saved.
+Bugs like these are hard to find. This plugin finds some of these cases while you type, and tells you how to fix them.
+</p>
+
+<p>It adds these inspections, under <b>Settings &gt; Editor &gt; Inspections &gt; Hibernate inspections</b>:</p>
+
+<ul>
+    <li><b>Persisted class is final</b>: an entity class declared as <code>final</code>.</li>
+    <li><b>Final method of a persisted class uses direct field access</b>: a <code>final</code> method that reads or writes a field of an entity.</li>
+    <li><b>Embeddable subclasses embeddable</b>: an <code>@Embeddable</code> class that extends another <code>@Embeddable</code> class (only a problem before Hibernate 6.6).</li>
+</ul>
+
+<p>
+Works with <code>jakarta.persistence</code> (Hibernate 6 and newer) and <code>javax.persistence</code> (Hibernate 5 and older) annotations.
+Only classes that use annotations are checked, not XML mappings.
+</p>
+
+<h2>Persisted class is final</h2>
+
+<p>
+To load data only when it's needed ("lazy loading"), Hibernate creates a subclass of your entity, called a <i>proxy</i>.
+It can't create a subclass of a <code>final</code> class, so Hibernate can't load it lazily, which can make your app slower.
+</p>
+
+<p>
+<b>How to fix it:</b> remove <code>final</code> from the class (press <b>Alt+Enter</b> on the warning, and choose
+<b>Remove 'final' modifier</b>). Records are not reported.
+</p>
+
+<h2>Final method of a persisted class uses direct field access</h2>
+
+<p>
+This is almost always a bug, and it fails silently. The proxy that Hibernate creates is a subclass of your class,
+and its fields are always empty. The proxy can't override a <code>final</code> method, so when you call that method
+on a proxy, it reads the proxy's empty fields. You get <code>null</code>, <code>0</code> or <code>false</code>
+instead of the real value, and no error.
+</p>
+
+<pre>
+@Entity
+public class Cat {
+    private String name;
+    public final String getName() { return name; }   // Warning
+}
+</pre>
+
+<p>
+<b>How to fix it:</b> remove <code>final</code> from the method (<b>Alt+Enter</b>), or don't use fields directly in
+<code>final</code> methods. Static methods and static fields are not reported.
+</p>
+
+<p>
+A <code>final getId()</code> that reads the id from the proxy is a valid exception.
+To turn off the warning for one method, add
+<code>@SuppressWarnings("AccessingFieldFromAFinalMethodOfPersistedClass")</code> to it.
+</p>
+
+<h2>Embeddable subclasses embeddable</h2>
+
+<p>
+Before version 6.6, Hibernate doesn't support an <code>@Embeddable</code> class that extends another
+<code>@Embeddable</code> class. It saves only some of the fields, and may silently set the embedded object to
+<code>null</code> when loading. Hibernate 6.6 and newer
+<a href="https://in.relation.to/2024/07/12/embeddable-inheritance/">support it</a>, so if your project uses
+Hibernate 6.6 or newer, this warning is not shown.
+</p>
+
+<h2>More information</h2>
+
+<ul>
+    <li><a href="https://github.com/marcglasberg/HibernateInspectionsPlugin">Full documentation and source code</a></li>
+    <li><a href="https://github.com/marcglasberg/HibernateInspectionsPlugin/issues">Report a bug or suggest a new inspection</a></li>
+</ul>
+
+<p>
+Created by <b>Marcelo Glasberg</b>:
+<a href="https://glasberg.dev">glasberg.dev</a>,
+<a href="https://github.com/marcglasberg">GitHub</a>,
+<a href="https://www.linkedin.com/in/marcglasberg/">LinkedIn</a>,
+<a href="https://stackoverflow.com/users/3411681/marcg">Stack Overflow</a>.
+</p>
+    ]]></description>
+
+    <change-notes><![CDATA[
+<h3>1.7</h3>
+<ul>
+    <li>Compatible with IntelliJ IDEA 2026.2 and newer.</li>
+    <li>Supports Jakarta Persistence (<code>jakarta.persistence</code>) annotations, used by Hibernate 6 and newer.</li>
+    <li>"Embeddable subclasses embeddable" no longer reports anything when the project uses Hibernate 6.6 or newer, which supports embeddable inheritance.</li>
+    <li>"Final method of a persisted class uses direct field access" no longer reports static methods, or methods that only access static fields.</li>
+    <li>"Persisted class is final" no longer reports records.</li>
+    <li>The warning now highlights only the <code>final</code> keyword, and the "Remove 'final' modifier" quick-fix shows a preview.</li>
+    <li>Removed usages of outdated IntelliJ Platform APIs.</li>
+</ul>
+<p>
+If you wish to contribute and add more inspections,
+this plugin is in <a href="https://github.com/marcglasberg/HibernateInspectionsPlugin">GitHub</a>.
+</p>
+    ]]></change-notes>
+</idea-plugin>

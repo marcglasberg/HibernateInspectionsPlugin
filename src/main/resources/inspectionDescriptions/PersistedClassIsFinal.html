@@ -1,0 +1,30 @@
+<html lang="en">
+<body>
+Reports classes marked with <code>@Entity</code>, <code>@MappedSuperclass</code> or <code>@Embeddable</code> that are <code>final</code>.
+<!-- tooltip end -->
+<p>
+    To load data only when it's needed ("lazy loading"), Hibernate creates a subclass of your class, called a <i>proxy</i>.
+    It can't create a subclass of a <code>final</code> class. Your code still works, but Hibernate can't load this class
+    lazily, which can make your app slower.
+</p>
+<p>Example:</p>
+<pre><code>
+@Entity
+public final class Cat { ... }   // Warning
+</code></pre>
+<p>
+    <b>How to fix it:</b> remove <code>final</code> from the class. The quick-fix does this for you.
+    If you really want the class to be <code>final</code>, you can turn off proxies for it with <code>@Proxy(lazy=false)</code>
+    (deprecated since Hibernate 6.2, and removed in Hibernate 7).
+</p>
+<p>
+    Records are not reported. Only classes that use annotations are checked, not XML mappings.
+    Works with <code>jakarta.persistence</code> and <code>javax.persistence</code> annotations.
+</p>
+<p>
+    More information:
+    <a href="https://docs.jboss.org/hibernate/orm/5.0/manual/en-US/html/ch04.html#persistent-classes-pojo-final-example-disable-proxies-ann">Hibernate documentation</a>,
+    <a href="https://stackoverflow.com/questions/6608222/does-a-final-method-prevent-hibernate-from-creating-a-proxy-for-such-an-entity">Stack Overflow question</a>.
+</p>
+</body>
+</html>
